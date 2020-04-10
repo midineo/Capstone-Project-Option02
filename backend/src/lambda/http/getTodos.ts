@@ -3,8 +3,12 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { getUserTodos } from '../../businessLogic/todos'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
+import { createLogger } from '../../utils/logger'
+const logger = createLogger('auth')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+
+  logger.info('get Todo Processing event: ', event)
 
   const authorization = event.headers.Authorization
   const split = authorization.split(' ')

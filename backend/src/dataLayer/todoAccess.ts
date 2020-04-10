@@ -1,4 +1,7 @@
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk')
+const AWSXRay = require('aws-xray-sdk')
+const XAWS = AWSXRay.captureAWS(AWS)
+
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
 const bucketName = process.env.TODOS_S3_BUCKET
@@ -6,7 +9,7 @@ const bucketName = process.env.TODOS_S3_BUCKET
 export class TodoAccess {
 
     constructor(
-        private readonly docClient = new AWS.DynamoDB.DocumentClient(),
+        private readonly docClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly todoTable = process.env.TODOS_TABLE) { }
 
     async getUserTodos(userId: string): Promise<TodoItem[]> {
