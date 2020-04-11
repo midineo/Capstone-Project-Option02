@@ -1,7 +1,10 @@
 # Capstone TODO Project
 
-This application will allow creating/removing/updating/fetching TODO items. Each TODO item can optionally have an attachment image. Each user only has access to TODO items that he/she has created.
-User can optionally set periority of each todo item
+-This application will allow creating/removing/updating/fetching TODO items. 
+
+-Each TODO item can optionally have an attachment image. Each user only has access to TODO items that he/she has created.
+
+-User can optionally set periority of each todo item
 
 # Project Components
 -Backend Restful API (Lambda Functions, API Gateway and DynamoDb)
