@@ -1,6 +1,10 @@
 import dateFormat from 'dateformat'
 import { History } from 'history'
 import update from 'immutability-helper'
+
+import Dropdown, { ReactDropdownProps } from 'react-dropdown';
+import 'react-dropdown/style.css';
+
 import * as React from 'react'
 import {
   Button,
@@ -17,6 +21,7 @@ import {
 import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
 import Auth from '../auth/Auth'
 import { Todo } from '../types/Todo'
+import ReactDropdown from 'react-dropdown';
 
 interface TodosProps {
   auth: Auth
@@ -27,14 +32,23 @@ interface TodosState {
   todos: Todo[]
   newTodoName: string
   loadingTodos: boolean
+  newTodoPeriority :string
 }
+
+const options = [
+  'Important', 'Normal', 'Low'
+]
+const defaultOption = options[1];
 
 export class Todos extends React.PureComponent<TodosProps, TodosState> {
   state: TodosState = {
     todos: [],
     newTodoName: '',
-    loadingTodos: true
+    loadingTodos: true,
+    newTodoPeriority:''
   }
+
+ 
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ newTodoName: event.target.value })
@@ -49,7 +63,9 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       const dueDate = this.calculateDueDate()
       const newTodo = await createTodo(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
-        dueDate
+        dueDate,
+        priority:this.state.newTodoPeriority
+        
       })
       this.setState({
         todos: [...this.state.todos, newTodo],
@@ -88,6 +104,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       alert('Todo deletion failed')
     }
   }
+  
 
   async componentDidMount() {
     try {
@@ -116,7 +133,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   renderCreateTodoInput() {
     return (
       <Grid.Row>
-        <Grid.Column width={16}>
+        <Grid.Column width={10} verticalAlign="middle">
           <Input
             action={{
               color: 'teal',
@@ -127,10 +144,13 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
+            placeholder="Type your TODO action..."
             onChange={this.handleNameChange}
           />
+          <Dropdown options={options} onChange={this.handleChange} value={this.state.newTodoPeriority} placeholder="Select Periority" />
+        
         </Grid.Column>
+       
         <Grid.Column width={16}>
           <Divider />
         </Grid.Column>
@@ -138,6 +158,15 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     )
   }
 
+  handleChange = (event:any) => {
+    console.log(event)
+    this.setState({
+        newTodoPeriority: event.value
+    });
+  }
+// handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//   this.setState({ newTodoName: event.target.value })
+// }
   renderTodos() {
     if (this.state.loadingTodos) {
       return this.renderLoading()
@@ -168,8 +197,11 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                   checked={todo.done}
                 />
               </Grid.Column>
-              <Grid.Column width={10} verticalAlign="middle">
+              <Grid.Column width={7} verticalAlign="middle">
                 {todo.name}
+              </Grid.Column>
+              <Grid.Column width={3} floated="right">
+                {todo.priority}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
                 {todo.dueDate}

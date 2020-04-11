@@ -29,7 +29,8 @@ export async function createTodo(
         createdAt: new Date().toISOString(),
         done: false,
         userId: userId,
-        attachmentUrl: null
+        attachmentUrl: null,
+        priority:createTodoRequest.priority
     })
 
 }
