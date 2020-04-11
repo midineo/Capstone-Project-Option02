@@ -4,6 +4,7 @@ This application will allow creating/removing/updating/fetching TODO items. Each
 
 # Project Components
 -Backend Restful API (Lambda Functions, API Gateway and DynamoDb)
+
 -Client (React)
 
 # How to run the application
@@ -32,4 +33,4 @@ This should start a development server with the React application that will inte
 
 # Postman collection
 
-
+Final Project.postman_collection.json
